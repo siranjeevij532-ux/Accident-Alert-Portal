@@ -182,6 +182,7 @@ class LiveMonitor:
         t0 = last_t = time.time()
         frame_no = 0
         fps = 15.0
+        avg_dt = 1.0 / 15.0
         fails = 0
         pre = deque(maxlen=EVENT_WINDOW_FRAMES)   # jpeg bytes of recent annotated frames
         timeline = deque(maxlen=EVENT_WINDOW_FRAMES)
@@ -206,7 +207,8 @@ class LiveMonitor:
                 now = time.time()
                 dt = max(1e-3, now - last_t)
                 last_t = now
-                fps = 0.9 * fps + 0.1 * (1.0 / dt)
+                avg_dt = 0.9 * avg_dt + 0.1 * dt      # smooth the gap, then invert: bursts can't inflate the fps
+                fps = 1.0 / avg_dt
 
                 dets = [d for d in detector(frame) if int(d[5]) in names]      # vehicles only
                 tracks = tracker.update(dets, now)
