@@ -1,0 +1,7 @@
+*.mp4
+*.pdf
+*.jpg
+outputs/
+.env
+.git
+__pycache__/
