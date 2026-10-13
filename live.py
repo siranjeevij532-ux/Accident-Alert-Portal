@@ -112,6 +112,11 @@ class LiveMonitor:
             self.state.update(running=True, status="starting", source=str(source),
                               started=datetime.now().strftime("%Y-%m-%d %H:%M:%S"), started_ts=time.time())
         self.stop_evt.clear()
+<<<<<<< HEAD
+=======
+        # browser source: accept frames right away (kept as "newest only") so the model-loading minute doesn't 409
+        self.browser_cap = BrowserCapture() if str(source).strip().lower() == "browser" else None
+>>>>>>> backup-local-files
         self.thread = threading.Thread(target=self._run, args=(detector_factory, source, location), daemon=True)
         self.thread.start()
 
@@ -139,7 +144,10 @@ class LiveMonitor:
 
     def _open(self, source):
         if str(source).strip().lower() == "browser":
+<<<<<<< HEAD
             self.browser_cap = BrowserCapture()
+=======
+>>>>>>> backup-local-files
             return self.browser_cap
         src = int(source) if str(source).strip().isdigit() else source
         if isinstance(src, int) and os.name == "nt":
