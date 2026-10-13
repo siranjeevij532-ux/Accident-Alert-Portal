@@ -5,15 +5,20 @@ const pillClass = (st) => ({ collision: "collision", cooldown: "cooldown", error
 let streamOn = false;
 
 // ---- browser camera: capture frames here, send them to the server for detection ----
-let camStream = null, sending = false;
+let camStream = null, sending = false, camStarting = false;
 const SEND_W = 640, SEND_GAP_MS = 120;
 async function startBrowserCamera() {
-  if (sending) return;
+  if (sending || camStarting) return;       // never open the camera twice (the status poll also calls this)
+  camStarting = true;
+  try { await openBrowserCamera(); } finally { camStarting = false; }
+}
+async function openBrowserCamera() {
   if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia)
     throw new Error("This browser cannot access a camera here (the site must be opened over https).");
   camStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment", width: { ideal: 1280 } }, audio: false });
   const v = $("#lvcam"); v.srcObject = camStream; await v.play();
-  sending = true;
+  sending = true; camStarting = false;
+  $("#lmsg").textContent = "Camera on - sending video to the server.";
   const c = $("#lvcanvas"), ctx = c.getContext("2d");
   while (sending) {
     const t0 = performance.now();
@@ -65,6 +70,7 @@ function render(snap) {
     streamOn = false; img.hidden = true; ph.hidden = false;
     const secs = Math.max(0, Math.round(snap.now - st.started_ts));
     ph.innerHTML = `<div><b>${esc(STATUS_TEXT[st.status] || st.status)}</b> (${secs} s)` +
+      (st.status === "waiting for browser camera" ? `<br><small>Click <b>Allow</b> on your browser's camera prompt (near the address bar). If you blocked it: click the lock icon → allow Camera → press Stop, then Start again. Close other apps or tabs using the camera.</small>` : "") +
       (st.status === "loading model" ? `<br><small>First start imports PyTorch and may download the YOLO model - this can take 1-2 minutes. Watch the terminal where server.py runs.</small>` : "") + `</div>`;
   } else if (run) {
     if (!streamOn) { streamOn = true; img.src = "/api/live/stream?t=" + Date.now(); }
