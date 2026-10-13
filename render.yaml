@@ -1,0 +1,28 @@
+# Render Blueprint: New + > Blueprint > pick this repo. Creates the web service AND the PostgreSQL database.
+services:
+  - type: web
+    name: accident-detection
+    runtime: docker
+    plan: standard            # PyTorch + YOLO need ~1-2 GB RAM; the 512 MB plans run out of memory
+    healthCheckPath: /healthz
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: accident-db
+          property: connectionString
+      - key: YOLO_MODEL
+        value: yolo11n.pt
+      - key: VEHICLE_CONF
+        value: "0.35"
+      - key: SENDER_EMAIL
+        sync: false           # asked for in the Render dashboard, never stored in git
+      - key: EMAIL_PASSWORD
+        sync: false
+      - key: RECEIVER_EMAIL
+        sync: false
+      - key: WEATHER_API_KEY
+        sync: false
+
+databases:
+  - name: accident-db
+    plan: basic-256mb

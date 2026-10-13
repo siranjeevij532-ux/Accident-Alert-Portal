@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Settings - Accident Alert Portal</title><link rel="stylesheet" href="/static/style.css"></head><body>
+<div class="page">
+  <div class="pagehead"><div><h1>Settings</h1><p class="muted">Set up where accident alerts go. Saved on this computer in the <code>.env</code> file - no restart needed.</p></div></div>
+
+  <section class="card">
+    <h2>1 · Email alerts</h2>
+    <ol class="steps">
+      <li>Use a Gmail account as the <b>sender</b>. Turn on <b>2-Step Verification</b> for it (Google Account → Security).</li>
+      <li>Open <a href="https://myaccount.google.com/apppasswords" target="_blank" rel="noopener">myaccount.google.com/apppasswords</a>, create an app password named "Accident portal" and copy the 16 letters.</li>
+      <li>Paste the sender, the app password, and who should receive alerts (several addresses: separate with commas). Save, then press <b>Send test email</b>.</li>
+    </ol>
+    <div class="fld2">
+      <label class="fld">Sender Gmail<input id="e_sender" placeholder="you@gmail.com" autocomplete="off"></label>
+      <label class="fld">App password <span id="e_pwset" class="muted"></span><input id="e_pw" type="password" placeholder="16-letter app password" autocomplete="new-password"></label>
+    </div>
+    <label class="fld">Send alerts to<input id="e_to" placeholder="family@gmail.com, hospital@example.com" autocomplete="off"></label>
+    <div class="row"><button class="primary" id="e_save">Save email settings</button><button id="e_test">Send test email</button></div>
+    <p class="result" id="e_res"></p>
+  </section>
+
+  <section class="card">
+    <h2>2 · Weather</h2>
+    <ol class="steps">
+      <li>Create a free account at <a href="https://home.openweathermap.org/users/sign_up" target="_blank" rel="noopener">openweathermap.org</a>.</li>
+      <li>Open <b>My API keys</b> and copy the key. A brand-new key can take up to <b>2 hours</b> to start working.</li>
+      <li>Paste it here, save, then press <b>Test weather</b>.</li>
+    </ol>
+    <label class="fld">OpenWeather API key <span id="w_set" class="muted"></span><input id="w_key" type="password" placeholder="paste key" autocomplete="new-password"></label>
+    <div class="row"><button class="primary" id="w_save">Save weather key</button><button id="w_test">Test weather</button></div>
+    <p class="result" id="w_res"></p>
+  </section>
+
+  <section class="card">
+    <h2>3 · Nearest hospital and police station</h2>
+    <p class="muted">No key needed - it uses free OpenStreetMap data and only needs internet. The distance is measured from the accident location you set on the Live monitor page. It searches 5 km, then 15 km, then 40 km.</p>
+    <div class="fld2">
+      <label class="fld">Latitude<input id="s_lat" value="19.070" inputmode="decimal"></label>
+      <label class="fld">Longitude<input id="s_lon" value="72.877" inputmode="decimal"></label>
+    </div>
+    <div class="row"><button id="s_geo" class="linkbtn">Use my location</button><button class="primary" id="s_test">Test hospital &amp; police lookup</button></div>
+    <p class="result" id="s_res"></p>
+  </section>
+
+  <section class="card">
+    <h2>4 · Webhook (optional)</h2>
+    <p class="muted">A URL that receives a JSON message when an accident is confirmed (for example a Slack/Discord/Zapier hook, or your own server).</p>
+    <label class="fld">Webhook URL<input id="h_url" placeholder="https://…" autocomplete="off"></label>
+    <div class="row"><button class="primary" id="h_save">Save webhook</button></div>
+    <p class="result" id="h_res"></p>
+  </section>
+</div>
+<script src="/static/common.js"></script><script src="/static/settings.js"></script>
+</body></html>

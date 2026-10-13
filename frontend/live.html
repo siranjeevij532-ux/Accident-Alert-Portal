@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Live monitor - Accident Alert Portal</title><link rel="stylesheet" href="/static/style.css"></head><body>
+<div class="layout">
+  <aside class="side">
+    <section class="card" id="livecard">
+      <h2>Live camera <span class="badge" id="livebadge">off</span></h2>
+      <label class="fld">Camera source
+        <input id="lsrc" value="browser" list="srcopts" placeholder="browser, 0, 1, or rtsp://… / http://…" autocomplete="off">
+        <datalist id="srcopts"><option value="browser">Browser camera (this device)</option><option value="0">Server camera 0</option><option value="1">Server camera 1</option></datalist>
+      </label>
+      <div class="fld2">
+        <label class="fld">Latitude<input id="llat" value="19.070" inputmode="decimal"></label>
+        <label class="fld">Longitude<input id="llon" value="72.877" inputmode="decimal"></label>
+      </div>
+      <button type="button" class="linkbtn" id="lgeo">Use my location</button>
+      <div class="row" style="margin-top:10px">
+        <button class="primary" id="lstart">Start live camera</button>
+        <button id="lstop" hidden>Stop</button>
+      </div>
+      <p class="muted small" id="lmsg">Source “browser” uses this device's webcam (needed on the hosted website). A number uses a camera plugged into the computer running server.py. Detects car, bike, bus and truck only.</p>
+    </section>
+    <section class="card">
+      <h2>Recent accidents</h2>
+      <div id="recent" class="history"><p class="muted">None yet.</p></div>
+      <p class="small"><a href="/reports">All accident reports →</a></p>
+    </section>
+  </aside>
+  <main class="main">
+    <div class="banner NONE" id="lvbanner"><div><h1>Live monitor</h1><p id="lvsub">Camera is off - press Start live camera.</p></div>
+      <div class="sev"><span class="livepill idle" id="lvpill">Idle</span></div></div>
+    <div class="live">
+      <div class="card"><h2>Camera feed</h2>
+        <div class="livevid"><img id="lvimg" alt="" hidden><video id="lvcam" muted playsinline hidden></video><canvas id="lvcanvas" hidden></canvas><div class="ph" id="lvph">Camera is off</div></div></div>
+      <div class="card"><h2>Live stats</h2>
+        <div class="bar"><i id="lvbar"></i></div>
+        <dl class="kv">
+          <dt>Status</dt><dd id="lvstatus">-</dd>
+          <dt>Vehicles in frame</dt><dd id="lvobj">-</dd>
+          <dt>Prolonged counter</dt><dd id="lvpro">-</dd>
+          <dt>Collision frames</dt><dd id="lvcol">-</dd>
+          <dt>Processing speed</dt><dd id="lvfps">-</dd>
+          <dt>Running for</dt><dd id="lvup">-</dd>
+          <dt>Accidents found</dt><dd id="lvinc">0</dd>
+        </dl></div>
+    </div>
+    <div class="card full" style="margin-top:16px"><h2>Messages</h2><div id="lvfeed"><p class="muted">No messages yet.</p></div></div>
+  </main>
+</div>
+<script src="/static/common.js"></script><script src="/static/live.js"></script>
+</body></html>
